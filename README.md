@@ -23,6 +23,7 @@ aws ssm put-parameter --name "/grafana/rds/master_password" --type "SecureString
 
 ### Setup
 
+```HCL
 module "grafana" {
   source = "git@github.com:ulikabbq/grafana-fargate?ref=v0.1//tf"
 
@@ -35,6 +36,7 @@ module "grafana" {
   lb_subnets    = ""
   db_subnet_ids = ""
 }
+```
 
 ### Available Variables
 
@@ -60,24 +62,25 @@ module "grafana" {
 
 **db_subnet_ids** (Required)
 
-**db_instance_type** the default is `db.t2.small` 
-
+**db_instance_type** the default is `db.t2.small`
 
 ### ECS Setup
-Terraform creates 2 ecr repos. Run the `image_upload.sh` to put the containers in the ECR repos
-* **grafana:** this image has a base of `grafana/grafana` and it is configured to install Chamber to retrive the enviornment variables from SSM. 
 
-* **grafana-nginx:** this image has a base of `nginx:1.13.9-alpine` and it is configured to be a passthrough to http://localhost:3000 where grafana runs. This container runs on port 80 and is the destination for the grafana target group. 
+Terraform creates 2 ecr repos. Run the `image_upload.sh` to put the containers in the ECR repos
+* **grafana:** this image has a base of `grafana/grafana` and it is configured to install Chamber to retrive the enviornment variables from SSM.
+
+* **grafana-nginx:** this image has a base of `nginx:1.13.9-alpine` and it is configured to be a passthrough to http://localhost:3000 where grafana runs. This container runs on port 80 and is the destination for the grafana target group.
 
 ### Aurora Setup
-Log into the Aurora database and run these commands: 
+
+Log into the Aurora database and run these commands:
 
     mysql> create database grafana;
-    
+
     mysql> GRANT USAGE ON `grafana`.* to 'grafana'@'<grafana-instance-001-EXAMPLE.us-east-1.rds.amazonaws.com>' identified by '<a password>';
-   
+
     mysql> GRANT ALL PRIVILEGES ON `grafana`.* to 'grafana'@'<grafana-instance-001-EXAMPLE.us-east-1.rds.amazonaws.com>' with grant option;
-    
+
     mysql> flush privileges;
 
-### Grafana Configuration 
+### Grafana Configuration
