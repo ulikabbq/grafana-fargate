@@ -11,8 +11,7 @@ variable "aws_account_ids" {
   type        = "map"
   description = "A mapping of AWS account IDs that have a Grafana role that allows Grafana to access CloudWatch metrics"
 
-  default = {
-  }
+  default = {}
 }
 
 variable "whitelist_ips" {
@@ -39,25 +38,35 @@ variable "cert_arn" {
 
 variable "vpc_id" {
   description = "The vpc id where grafana will be deployed"
-  default = ""
+  default     = ""
 }
 
 variable "subnets" {
   description = "the subnets used for the grafana task"
-  default = ""
+  default     = [""]
 }
 
 variable "lb_subnets" {
   description = "the load balancer subnets"
-  default = ""
+  default     = [""]
 }
 
 variable "db_subnet_ids" {
   description = "the subnets to launch the Aurora databse"
-  default = ""
+  default     = [""]
 }
 
 variable "db_instance_type" {
   description = "the instance size for the Aurora database"
   default     = "db.t2.small"
+}
+
+variable "image_url" {
+  description = "the image url for the grafana image"
+  default     = "ulikabbq/grafana:v0.1"
+}
+
+variable "nginx_image_url" {
+  description = "the image url for the nginx sidecar image"
+  default     = "ulikabbq/nginx_grafana:v0.1"
 }

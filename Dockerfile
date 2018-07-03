@@ -1,8 +1,8 @@
 # Maintainer: github.com/ulikabbq
 # https://github.com/grafana/grafana-docker
-# note that there is a breaking change to this if you go above version 5.1.3
-# the chamber install breaks on 5.1.4 and up. 
-FROM grafana/grafana:5.1.3
+# note that there is a breaking change to this if you go above version 5.0.4
+# the chamber install breaks on 5.0.5 and up. 
+FROM grafana/grafana:5.0.4
 
 # Install chamber
 ENV CHAMBER_VERSION=2.0.0

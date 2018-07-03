@@ -2,8 +2,8 @@ data "template_file" "grafana" {
   template = "${file("${path.module}/task_definitions/grafana.json")}"
 
   vars {
-    image_url        = "${aws_ecr_repository.grafana.repository_url}:latest"
-    nginx_image_url  = "${aws_ecr_repository.grafana_nginx.repository_url}:latest"
+    image_url        = "${var.image_url}"
+    nginx_image_url  = "${var.nginx_image_url}"
     server_name      = "${var.dns_name}"
     log_group_region = "${var.aws_region}"
     log_group_name   = "${aws_cloudwatch_log_group.grafana.name}"
@@ -42,10 +42,7 @@ resource "aws_ecs_service" "grafana" {
 
   network_configuration {
     security_groups = ["${aws_security_group.grafana_ecs.id}"]
-
-    // change these default values and remove assign_public_ip
-    subnets          = ["${aws_default_subnet.default_az1.id}", "${aws_default_subnet.default_az2.id}"]
-    assign_public_ip = true
+    subnets         = ["${var.subnets}"]
   }
 
   load_balancer {
@@ -59,17 +56,4 @@ resource "aws_ecs_service" "grafana" {
 
 resource "aws_cloudwatch_log_group" "grafana" {
   name = "grafana"
-}
-
-module "grafana" {
-  source = "git@github.com:ulikabbq/grafana-fargate?ref=v0.1//tf"
-
-  account_id    = ""
-  dns_zone      = ""
-  dns_name      = ""
-  cert_arn      = ""
-  vpc_id        = ""
-  subnets       = ""
-  lb_subnets    = ""
-  db_subnet_ids = ""
 }

@@ -2,7 +2,7 @@ resource "aws_lb" "grafana" {
   name            = "grafana"
   internal        = "false"
   security_groups = ["${aws_security_group.grafana_alb.id}"]
-  subnets         = ["${aws_default_subnet.default_az1.id}", "${aws_default_subnet.default_az2.id}"]
+  subnets         = ["${var.lb_subnets}"]
   idle_timeout    = "3600"
 
   enable_deletion_protection = false
@@ -42,7 +42,7 @@ resource "aws_lb_target_group" "grafana" {
   name                 = "grafana-tg"
   port                 = 80
   protocol             = "HTTP"
-  vpc_id               = "${aws_default_vpc.default.id}"
+  vpc_id               = "${var.vpc_id}"
   target_type          = "ip"
   deregistration_delay = 30
 

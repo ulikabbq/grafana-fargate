@@ -1,7 +1,7 @@
 resource "aws_security_group" "grafana_alb" {
   description = "the alb security group that allows port 80/443 from whitelisted ips"
 
-  vpc_id = "${aws_default_vpc.default.id}"
+  vpc_id = "${var.vpc_id}"
   name   = "grafana-alb"
 
   ingress {
@@ -29,7 +29,7 @@ resource "aws_security_group" "grafana_alb" {
 resource "aws_security_group" "grafana_ecs" {
   description = "ingress to the grafana fargate task from the alb"
 
-  vpc_id = "${aws_default_vpc.default.id}"
+  vpc_id = "${var.vpc_id}"
   name   = "grafana-ecs"
 
   ingress {

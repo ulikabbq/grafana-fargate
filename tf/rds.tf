@@ -1,7 +1,7 @@
 resource "aws_security_group" "rds" {
   name_prefix = "grafana-aurora56"
   description = "RDS Aurora access from internal security groups"
-  vpc_id      = "${aws_default_vpc.default.id}"
+  vpc_id      = "${var.vpc_id}"
 
   ingress {
     description     = "Allow 3306 from defined security groups"
@@ -21,7 +21,7 @@ resource "aws_security_group" "rds" {
 resource "aws_db_subnet_group" "grafana" {
   name        = "grafana-aurora56"
   description = "Subnets to launch RDS database into"
-  subnet_ids  = ["${aws_default_subnet.default_az1.id}", "${aws_default_subnet.default_az2.id}"]
+  subnet_ids  = ["${var.db_subnet_ids}"]
 
   tags {
     Name        = "grafana-aurora56-subnet-group"
