@@ -1,0 +1,48 @@
+[
+    {
+        "image": "${image_url}",
+        "name": "grafana",
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${log_group_name}",
+                "awslogs-region": "${log_group_region}",
+                "awslogs-stream-prefix": "grafana"
+            }
+        },
+        "essential": true,
+        "portMappings": [
+            {
+                "hostPort": 3000,
+                "containerPort": 3000,
+                "protocol": "tcp"
+            }
+        ]
+    },
+    {
+        "image": "${nginx_image_url}",
+        "name": "grafana_nginx",
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${log_group_name}",
+                "awslogs-region": "${log_group_region}",
+                "awslogs-stream-prefix": "grafana_nginx"
+            }
+        },
+        "essential": true,
+        "environment": [
+            {
+                "name": "SERVER_NAME",
+                "value": "${server_name}"
+            }
+        ],
+        "portMappings": [
+            {
+                "hostPort": 80,
+                "containerPort": 80,
+                "protocol": "tcp"
+            }
+        ]
+    }
+]

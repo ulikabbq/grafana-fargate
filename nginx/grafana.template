@@ -1,0 +1,15 @@
+server {
+  listen 80;
+  server_name    ${SERVER_NAME};
+  root /usr/share/nginx/www;
+  index index.html index.htm;
+  
+  # 301 redirect http traffic to https
+  if ($http_x_forwarded_proto = 'http') {            
+    return 301 https://$server_name$request_uri;
+  }
+
+  location / {
+   proxy_pass http://localhost:3000;
+  }
+}
