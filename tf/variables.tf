@@ -70,3 +70,13 @@ variable "nginx_image_url" {
   description = "the image url for the nginx sidecar image"
   default     = "ulikabbq/nginx_grafana:v0.1"
 }
+
+variable "bastion_count" {
+  description = "the number of bastion host"
+  default     = "1"
+}
+
+variable "key" {
+  description = "key pair for accessing the bastion"
+  default     = ""
+}

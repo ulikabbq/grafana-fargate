@@ -63,3 +63,32 @@ resource "aws_lb_target_group" "grafana" {
     ManagedBy   = "Terraform"
   }
 }
+
+resource "aws_security_group" "grafana_alb" {
+  description = "the alb security group that allows port 80/443 from whitelisted ips"
+
+  vpc_id = "${var.vpc_id}"
+  name   = "grafana-alb"
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["${var.whitelist_ips}"]
+  }
+
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = ["${var.whitelist_ips}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}

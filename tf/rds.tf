@@ -32,7 +32,7 @@ resource "aws_db_subnet_group" "grafana" {
 
 resource "aws_rds_cluster" "grafana" {
   engine                 = "aurora"
-  database_name          = "grafana2"
+  database_name          = "grafana"
   master_username        = "root"
   master_password        = "${data.aws_ssm_parameter.rds_master_password.value}"
   storage_encrypted      = true
