@@ -4,11 +4,15 @@ resource "aws_security_group" "rds" {
   vpc_id      = "${var.vpc_id}"
 
   ingress {
-    description     = "Allow 3306 from defined security groups"
-    protocol        = "tcp"
-    from_port       = 3306
-    to_port         = 3306
-    security_groups = ["${aws_security_group.grafana_ecs.id}"]
+    description = "Allow 3306 from defined security groups"
+    protocol    = "tcp"
+    from_port   = 3306
+    to_port     = 3306
+
+    security_groups = [
+      "${aws_security_group.grafana_ecs.id}",
+      "${aws_security_group.bastion.id}",
+    ]
   }
 
   tags {

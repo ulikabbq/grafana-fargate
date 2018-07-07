@@ -85,3 +85,8 @@ variable "bastion_whitelist_ips" {
   description = "ips to whitelist to access the bastion"
   default     = [""]
 }
+
+variable "bastion_subnet" {
+  description = "the subnet id for the bastion"
+  default     = ""
+}
