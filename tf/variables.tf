@@ -80,3 +80,8 @@ variable "key" {
   description = "key pair for accessing the bastion"
   default     = ""
 }
+
+variable "bastion_whitelist_ips" {
+  description = "ips to whitelist to access the bastion"
+  default     = [""]
+}
