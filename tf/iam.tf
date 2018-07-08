@@ -16,26 +16,6 @@ data "aws_iam_policy_document" "grafana_ecs_task_execution_assume_role" {
 // task execution role policy document
 data "aws_iam_policy_document" "grafana_ecs_task_execution_role" {
   statement {
-    sid       = "AllowECSToAuthenticateToECRInCentralAccount"
-    effect    = "Allow"
-    actions   = ["ecr:GetAuthorizationToken"]
-    resources = ["*"]
-  }
-
-  statement {
-    sid    = "AllowECSToPullGrafanaImages"
-    effect = "Allow"
-
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:BatchGetImage",
-    ]
-
-    resources = ["${aws_ecr_repository.grafana.arn}", "${aws_ecr_repository.grafana_nginx.arn}"]
-  }
-
-  statement {
     sid    = "AllowECSToWriteLogsToCloudWatchLogs"
     effect = "Allow"
 
