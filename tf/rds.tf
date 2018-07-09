@@ -4,11 +4,15 @@ resource "aws_security_group" "rds" {
   vpc_id      = "${var.vpc_id}"
 
   ingress {
-    description     = "Allow 3306 from defined security groups"
-    protocol        = "tcp"
-    from_port       = 3306
-    to_port         = 3306
-    security_groups = ["${aws_security_group.grafana_ecs.id}"]
+    description = "Allow 3306 from defined security groups"
+    protocol    = "tcp"
+    from_port   = 3306
+    to_port     = 3306
+
+    security_groups = [
+      "${aws_security_group.grafana_ecs.id}",
+      "${aws_security_group.bastion.id}",
+    ]
   }
 
   tags {
@@ -32,7 +36,7 @@ resource "aws_db_subnet_group" "grafana" {
 
 resource "aws_rds_cluster" "grafana" {
   engine                 = "aurora"
-  database_name          = "grafana2"
+  database_name          = "grafana"
   master_username        = "root"
   master_password        = "${data.aws_ssm_parameter.rds_master_password.value}"
   storage_encrypted      = true
