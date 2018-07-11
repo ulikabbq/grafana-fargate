@@ -64,13 +64,6 @@ resource "aws_security_group" "grafana_ecs" {
   vpc_id = "${var.vpc_id}"
   name   = "grafana-ecs"
 
-  ingress {
-    protocol        = "tcp"
-    from_port       = 3000
-    to_port         = 3000
-    security_groups = ["${aws_security_group.grafana_alb.id}"]
-  }
-
   //nginx
   ingress {
     protocol        = "tcp"
