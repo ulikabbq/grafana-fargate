@@ -29,6 +29,10 @@ resource "aws_instance" "bastion" {
   }
 }
 
+data "template_file" "cloud_config" {
+  template = "${file("${path.module}/cloud-config")}"
+}
+
 resource "aws_security_group" "bastion" {
   description = "the bastion security group that allows port 22 from whitelisted ips"
 
