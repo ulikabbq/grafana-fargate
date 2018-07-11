@@ -79,3 +79,4 @@ resource "aws_security_group" "grafana_ecs" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
