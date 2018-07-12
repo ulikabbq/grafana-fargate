@@ -3,7 +3,7 @@
 This is a terraform module for Grafana running on AWS fargate with an Aurora RDS MySQL backend.
 
 Here is the blog post that covers this setup:  
-https://medium.com/247sports-engineering
+https://medium.com/247sports-engineering/highly-available-grafana-running-on-aws-fargate-and-rds-aurora-2bbea9d41b50
 
 ## Information / Prerequisites
 
@@ -93,6 +93,14 @@ output "grafana_role" {
 **image_url** the default is `ulikabbq/grafana:v0.1`
 
 **nginx_image_url** the default is `ulikabbq/nginx_grafana:v0.1`
+
+**bastion_count** the number of bastion host. the deafult is 1, but set to 0 when the Aurora setup is complete
+
+**key** the key used to ssh into the bastion
+
+**bastion_whitelist_ips** the list of allowed ips to ssh to the bastion
+
+**bastion_subnet** the subnet for the bastion host
 
 ### Aurora Setup
 
