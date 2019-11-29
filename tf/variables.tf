@@ -8,14 +8,14 @@ variable "account_id" {
 }
 
 variable "aws_account_ids" {
-  type        = "map"
+  type        = map(string)
   description = "A mapping of AWS account IDs that have a Grafana role that allows Grafana to access CloudWatch metrics"
 
   default = {}
 }
 
 variable "whitelist_ips" {
-  type        = "list"
+  type        = list(string)
   description = "List of whitelisted ip addresses that can access grafana"
 
   default = ["0.0.0.0/0"]
@@ -90,3 +90,4 @@ variable "bastion_subnet" {
   description = "the subnet id for the bastion"
   default     = ""
 }
+

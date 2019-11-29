@@ -15,35 +15,35 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_instance" "bastion" {
-  count                       = "${var.bastion_count}"
-  ami                         = "${data.aws_ami.ubuntu.id}"
+  count                       = var.bastion_count
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.micro"
-  key_name                    = "${var.key}"
-  vpc_security_group_ids      = ["${aws_security_group.bastion.id}"]
+  key_name                    = var.key
+  vpc_security_group_ids      = [aws_security_group.bastion.id]
   associate_public_ip_address = true
-  subnet_id                   = "${var.bastion_subnet}"
-  user_data                   = "${data.template_file.cloud_config.rendered}"
+  subnet_id                   = var.bastion_subnet
+  user_data                   = data.template_file.cloud_config.rendered
 
-  tags {
+  tags = {
     Name = "bastion_host"
   }
 }
 
 data "template_file" "cloud_config" {
-  template = "${file("${path.module}/cloud-config")}"
+  template = file("${path.module}/cloud-config")
 }
 
 resource "aws_security_group" "bastion" {
   description = "the bastion security group that allows port 22 from whitelisted ips"
 
-  vpc_id = "${var.vpc_id}"
+  vpc_id = var.vpc_id
   name   = "bastion_grafana"
 
   ingress {
     protocol    = "tcp"
     from_port   = 22
     to_port     = 22
-    cidr_blocks = ["${var.bastion_whitelist_ips}"]
+    cidr_blocks = var.bastion_whitelist_ips
   }
 
   egress {
@@ -53,3 +53,4 @@ resource "aws_security_group" "bastion" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
