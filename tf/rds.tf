@@ -11,7 +11,6 @@ resource "aws_security_group" "rds" {
 
     security_groups = [
       aws_security_group.grafana_ecs.id,
-      aws_security_group.bastion.id,
     ]
   }
 

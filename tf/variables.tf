@@ -71,23 +71,3 @@ variable "nginx_image_url" {
   default     = "ulikabbq/nginx_grafana:0.1"
 }
 
-variable "bastion_count" {
-  description = "the number of bastion host"
-  default     = "1"
-}
-
-variable "key" {
-  description = "key pair for accessing the bastion"
-  default     = ""
-}
-
-variable "bastion_whitelist_ips" {
-  description = "ips to whitelist to access the bastion"
-  default     = [""]
-}
-
-variable "bastion_subnet" {
-  description = "the subnet id for the bastion"
-  default     = ""
-}
-
