@@ -3,8 +3,6 @@ data "template_file" "grafana" {
 
   vars = {
     image_url        = var.image_url
-    nginx_image_url  = var.nginx_image_url
-    server_name      = var.dns_name
     log_group_region = var.aws_region
     log_group_name   = aws_cloudwatch_log_group.grafana.name
   }
@@ -16,10 +14,6 @@ resource "aws_ecs_cluster" "grafana" {
 
 resource "aws_ecr_repository" "grafana" {
   name = "grafana"
-}
-
-resource "aws_ecr_repository" "grafana_nginx" {
-  name = "grafana_nginx"
 }
 
 resource "aws_ecs_task_definition" "grafana" {
@@ -48,7 +42,7 @@ resource "aws_ecs_service" "grafana" {
   load_balancer {
     target_group_arn = aws_lb_target_group.grafana.arn
     container_name   = "grafana_nginx"
-    container_port   = 80
+    container_port   = 3000
   }
 
   depends_on = [aws_lb.grafana]
@@ -67,8 +61,8 @@ resource "aws_security_group" "grafana_ecs" {
   //nginx
   ingress {
     protocol        = "tcp"
-    from_port       = 80
-    to_port         = 80
+    from_port       = 3000
+    to_port         = 3000
     security_groups = [aws_security_group.grafana_alb.id]
   }
 

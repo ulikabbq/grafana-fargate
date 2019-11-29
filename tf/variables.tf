@@ -23,7 +23,6 @@ variable "whitelist_ips" {
 
 variable "dns_zone" {
   description = "the Route 53 ZoneId"
-  default     = ""
 }
 
 variable "dns_name" {
