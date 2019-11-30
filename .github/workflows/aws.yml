@@ -3,9 +3,7 @@
 # to the master branch.
 #
 on:
-  push:
-    branches:
-      - master
+  - pull_request
 
 name: Deploy to Amazon ECS
 
