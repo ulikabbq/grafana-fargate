@@ -1,0 +1,35 @@
+{
+    "executionRoleArn": "",
+    "containerDefinitions": [
+        {
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "secretOptions": null,
+                "options": {
+                    "awslogs-group": "fargate/githubactions",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "nginx"
+                }
+            },
+            "portMappings": [
+                {
+                    "hostPort": 3000,
+                    "protocol": "tcp",
+                    "containerPort": 3000
+                }
+            ],
+            "image": "",
+            "essential": true,
+            "privileged": false,
+            "name": "nginx"
+        }
+    ],
+    "taskRoleArn": "",
+    "family": "githubaction",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "256",
+    "memory": "512"
+}
