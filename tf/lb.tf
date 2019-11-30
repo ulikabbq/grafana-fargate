@@ -40,7 +40,7 @@ resource "aws_lb_listener" "front_end_https" {
 
 resource "aws_lb_target_group" "grafana" {
   name                 = "grafana-tg"
-  port                 = 80
+  port                 = 3000
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
   target_type          = "ip"
@@ -49,12 +49,10 @@ resource "aws_lb_target_group" "grafana" {
   health_check {
     interval            = 10
     path                = "/login"
-    port                = "80"
     healthy_threshold   = 2
     unhealthy_threshold = 3
     timeout             = 5
     protocol            = "HTTP"
-    matcher             = "200"
   }
 
   tags = {

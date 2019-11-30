@@ -64,7 +64,7 @@ data "aws_iam_policy_document" "grafana_ecs_task_role" {
     actions = ["ssm:GetParametersByPath"]
 
     resources = [
-      "arn:aws:ssm:${var.aws_region}:${var.account_id}:parameter/grafana/*",
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/grafana/*",
     ]
   }
 
@@ -72,7 +72,7 @@ data "aws_iam_policy_document" "grafana_ecs_task_role" {
     sid       = "AllowAccessToKMSForDecryptingSSMParameters"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
-    resources = ["arn:aws:kms:${var.aws_region}:${var.account_id}:alias/aws/ssm"]
+    resources = ["arn:aws:kms:${var.region}:${var.account_id}:alias/aws/ssm"]
   }
 
   statement {

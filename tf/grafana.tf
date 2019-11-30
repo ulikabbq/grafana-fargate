@@ -3,7 +3,7 @@ data "template_file" "grafana" {
 
   vars = {
     image_url        = var.image_url
-    log_group_region = var.aws_region
+    log_group_region = var.region
     log_group_name   = aws_cloudwatch_log_group.grafana.name
   }
 }
@@ -41,7 +41,7 @@ resource "aws_ecs_service" "grafana" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.grafana.arn
-    container_name   = "grafana_nginx"
+    container_name   = "grafana"
     container_port   = 3000
   }
 
