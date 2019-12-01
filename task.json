@@ -21,7 +21,7 @@
             "image": "",
             "essential": true,
             "privileged": false,
-            "name": "nginx"
+            "name": "grafana"
         }
     ],
     "taskRoleArn": "arn:aws:iam::433223883348:role/grafana-ecs-task",
