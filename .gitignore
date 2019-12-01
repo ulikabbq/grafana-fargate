@@ -2,3 +2,6 @@
 *.pyc
 tfplan*
 *.terraform*
+*.tfvars
+*.tfstate.*
+*.tfstate

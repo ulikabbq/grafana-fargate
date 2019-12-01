@@ -1,7 +1,7 @@
 resource "aws_security_group" "rds" {
   name_prefix = "grafana-aurora56"
   description = "RDS Aurora access from internal security groups"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "Allow 3306 from defined security groups"
@@ -10,12 +10,11 @@ resource "aws_security_group" "rds" {
     to_port     = 3306
 
     security_groups = [
-      "${aws_security_group.grafana_ecs.id}",
-      "${aws_security_group.bastion.id}",
+      aws_security_group.grafana_ecs.id,
     ]
   }
 
-  tags {
+  tags = {
     Name        = "grafana-aurora56"
     Description = "RDS Aurora access from internal security groups"
     ManagedBy   = "Terraform"
@@ -25,9 +24,9 @@ resource "aws_security_group" "rds" {
 resource "aws_db_subnet_group" "grafana" {
   name        = "grafana-aurora56"
   description = "Subnets to launch RDS database into"
-  subnet_ids  = ["${var.db_subnet_ids}"]
+  subnet_ids  = var.db_subnet_ids
 
-  tags {
+  tags = {
     Name        = "grafana-aurora56-subnet-group"
     Description = "Subnets to use for RDS databases"
     ManagedBy   = "Terraform"
@@ -38,13 +37,13 @@ resource "aws_rds_cluster" "grafana" {
   engine                 = "aurora"
   database_name          = "grafana"
   master_username        = "root"
-  master_password        = "${data.aws_ssm_parameter.rds_master_password.value}"
+  master_password        = data.aws_ssm_parameter.rds_master_password.value
   storage_encrypted      = true
-  db_subnet_group_name   = "${aws_db_subnet_group.grafana.name}"
-  vpc_security_group_ids = ["${aws_security_group.rds.id}"]
+  db_subnet_group_name   = aws_db_subnet_group.grafana.name
+  vpc_security_group_ids = [aws_security_group.rds.id]
   skip_final_snapshot    = true
 
-  tags {
+  tags = {
     Name        = "grafana"
     Description = "RDS Aurora cluster for the grafana environment"
     ManagedBy   = "Terraform"
@@ -59,15 +58,15 @@ resource "aws_rds_cluster" "grafana" {
 resource "aws_rds_cluster_instance" "grafana" {
   count = "1"
 
-  cluster_identifier         = "${aws_rds_cluster.grafana.id}"
+  cluster_identifier         = aws_rds_cluster.grafana.id
   identifier                 = "grafana-${count.index}"
   engine                     = "aurora"
-  instance_class             = "${var.db_instance_type}"
+  instance_class             = var.db_instance_type
   publicly_accessible        = false
-  db_subnet_group_name       = "${aws_db_subnet_group.grafana.name}"
+  db_subnet_group_name       = aws_db_subnet_group.grafana.name
   auto_minor_version_upgrade = true
 
-  tags {
+  tags = {
     Name        = "grafana-aurora-instance"
     Description = "RDS Aurora cluster for the grafana environment"
     ManagedBy   = "Terraform"
@@ -77,3 +76,4 @@ resource "aws_rds_cluster_instance" "grafana" {
     create_before_destroy = true
   }
 }
+

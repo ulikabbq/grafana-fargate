@@ -9,12 +9,12 @@ resource "aws_cloudwatch_metric_alarm" "grafana_service_high_cpu" {
   statistic           = "Average"
   threshold           = "40"
 
-  dimensions {
-    ClusterName = "${aws_ecs_cluster.grafana.name}"
-    ServiceName = "${aws_ecs_service.grafana.name}"
+  dimensions = {
+    ClusterName = aws_ecs_cluster.grafana.name
+    ServiceName = aws_ecs_service.grafana.name
   }
 
-  alarm_actions = ["${aws_appautoscaling_policy.service_up.arn}"]
+  alarm_actions = [aws_appautoscaling_policy.service_up.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "grafana_service_low_cpu" {
@@ -27,24 +27,22 @@ resource "aws_cloudwatch_metric_alarm" "grafana_service_low_cpu" {
   statistic           = "Average"
   threshold           = "29"
 
-  dimensions {
-    ClusterName = "${aws_ecs_cluster.grafana.name}"
-    ServiceName = "${aws_ecs_service.grafana.name}"
+  dimensions = {
+    ClusterName = aws_ecs_cluster.grafana.name
+    ServiceName = aws_ecs_service.grafana.name
   }
 
-  alarm_actions = ["${aws_appautoscaling_policy.service_down.arn}"]
+  alarm_actions = [aws_appautoscaling_policy.service_down.arn]
 }
 
 resource "aws_appautoscaling_target" "service_scale_target" {
   service_namespace  = "ecs"
   resource_id        = "service/${aws_ecs_cluster.grafana.name}/${aws_ecs_service.grafana.name}"
   scalable_dimension = "ecs:service:DesiredCount"
-  min_capacity       = 1
-  max_capacity       = 4
+  min_capacity       = var.grafana_count
+  max_capacity       = 10
 
-  depends_on = [
-    "aws_ecs_service.grafana",
-  ]
+  depends_on = [aws_ecs_service.grafana]
 }
 
 resource "aws_appautoscaling_policy" "service_up" {
@@ -64,9 +62,7 @@ resource "aws_appautoscaling_policy" "service_up" {
     }
   }
 
-  depends_on = [
-    "aws_appautoscaling_target.service_scale_target",
-  ]
+  depends_on = [aws_appautoscaling_target.service_scale_target]
 }
 
 resource "aws_appautoscaling_policy" "service_down" {
@@ -86,7 +82,6 @@ resource "aws_appautoscaling_policy" "service_down" {
     }
   }
 
-  depends_on = [
-    "aws_appautoscaling_target.service_scale_target",
-  ]
+  depends_on = [aws_appautoscaling_target.service_scale_target]
 }
+

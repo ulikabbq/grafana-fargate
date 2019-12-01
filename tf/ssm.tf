@@ -38,3 +38,5 @@ resource "aws_ssm_parameter" "GF_DATABASE_HOST" {
   type  = "String"
   value = "${aws_rds_cluster.grafana.endpoint}:3306"
 }
+
+
