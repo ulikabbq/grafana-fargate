@@ -6,9 +6,9 @@
                 "logDriver": "awslogs",
                 "secretOptions": null,
                 "options": {
-                    "awslogs-group": "fargate/githubactions",
+                    "awslogs-group": "grafana",
                     "awslogs-region": "us-east-1",
-                    "awslogs-stream-prefix": "nginx"
+                    "awslogs-stream-prefix": "grafana"
                 }
             },
             "portMappings": [
@@ -25,7 +25,7 @@
         }
     ],
     "taskRoleArn": "arn:aws:iam::433223883348:role/grafana-ecs-task",
-    "family": "githubaction",
+    "family": "grafana_task_definition",
     "requiresCompatibilities": [
         "FARGATE"
     ],
