@@ -1,5 +1,5 @@
 module "grafana" {
-  source = "../tf/"
+  source = "git@github.com:ulikabbq/grafana-fargate?ref=v1.0//tf"
 
   dns_zone      = "ZZ7C1JZLM75QT"
   region        = "us-east-1"
@@ -13,7 +13,7 @@ module "grafana" {
   aws_account_ids = {
     main = "433223883348"
   }
-  grafana_count = 3
+  grafana_count = 2
 }
 
 provider "aws" {
