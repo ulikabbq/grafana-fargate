@@ -38,7 +38,7 @@ Because this setup enforces HTTPS, it is required to provide a DNS name space, a
 
 ```HCL
 module "grafana" {
-  source = "../tf/"
+  source = "git@github.com:ulikabbq/grafana-fargate?ref=v1.0//tf"
 
   dns_zone        = "ZZ7C1JZLM75QT"
   region          = "us-east-1"
@@ -97,3 +97,14 @@ resource "aws_ssm_parameter" "GF_INSTALL_PLUGINS" {
 
 ### GitHub Actions 
 The GitHub Action in this repo will push the Dockerfile to ecr and update the grafana service. To utilize this action, change the account id in the task.json for the `executionRoleArn` and `taskRoleArn`. You will also need to add a `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to GitHub secrets. 
+
+### IAM Role for other monitored accounts 
+For the accounts you want to monitor with Grafana, you will need a Grafana role in that account that the main grafana role can assume. To add this role run this module in the account. 
+
+```HCL
+module "iam" {
+  source = "git@github.com:ulikabbq/grafana-fargate?ref=v1.0//tf/iam_role/"
+
+  grafana_account_id = "433223883348"
+}
+```
