@@ -55,6 +55,6 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: github-actions
-        cluster: githubaction
+        service: grafana
+        cluster: grafana
         wait-for-service-stability: true
