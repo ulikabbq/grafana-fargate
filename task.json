@@ -1,5 +1,5 @@
 {
-    "executionRoleArn": "",
+    "executionRoleArn": "arn:aws:iam::433223883348:role/grafana-ecs-task-execution",
     "containerDefinitions": [
         {
             "logConfiguration": {
@@ -24,7 +24,7 @@
             "name": "nginx"
         }
     ],
-    "taskRoleArn": "",
+    "taskRoleArn": "arn:aws:iam::433223883348:role/grafana-ecs-task",
     "family": "githubaction",
     "requiresCompatibilities": [
         "FARGATE"
