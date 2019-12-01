@@ -39,8 +39,8 @@ resource "aws_appautoscaling_target" "service_scale_target" {
   service_namespace  = "ecs"
   resource_id        = "service/${aws_ecs_cluster.grafana.name}/${aws_ecs_service.grafana.name}"
   scalable_dimension = "ecs:service:DesiredCount"
-  min_capacity       = 1
-  max_capacity       = 4
+  min_capacity       = var.grafana_count
+  max_capacity       = 10
 
   depends_on = [aws_ecs_service.grafana]
 }

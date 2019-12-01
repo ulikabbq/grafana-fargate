@@ -31,7 +31,7 @@ resource "aws_ecs_service" "grafana" {
   name            = "grafana"
   cluster         = aws_ecs_cluster.grafana.name
   task_definition = aws_ecs_task_definition.grafana.arn
-  desired_count   = 1
+  desired_count   = var.grafana_count
   launch_type     = "FARGATE"
 
   network_configuration {

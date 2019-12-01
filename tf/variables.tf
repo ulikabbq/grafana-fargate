@@ -70,3 +70,6 @@ variable "nginx_image_url" {
   default     = "ulikabbq/nginx_grafana:0.1"
 }
 
+variable "grafana_count" {
+  default = "1"
+}

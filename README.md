@@ -1,3 +1,14 @@
+# UPDATE 12.01.2019 
+It has been a while since I last visited this project and I felt like it needed some updating. The good news is that now it is 
+even easier to get this module up and running. 
+
+## Updates 
+Upgraded to Terraform 0.12
+Added GitHub Actions to publish and deploy the fargate container 
+Grafana version 6.5.1 
+Removed the bastion host (no longer need to run the mysql commands)
+Removed nginx (was handling https redirects that are now in the lb listener)
+
 # Grafana Fargate Terraform Module
 
 This is a terraform module for Grafana running on AWS fargate with an Aurora RDS MySQL backend.
@@ -7,7 +18,7 @@ https://medium.com/247sports-engineering/highly-available-grafana-running-on-aws
 
 ## Information / Prerequisites
 
-Even though this terraform module will setup all the infrastructure you need, there are a couple of manual steps. To setup the database it requires running a bastion host and executing 3 mysql commands and there are 2 ssm parameters that are expected to be in the account.  
+Even though this terraform module will setup all the infrastructure you need, there are a couple of manual steps. There are 2 ssm parameters that are expected to be in the account.  
 
 The 2 secrets that should be stored in ssm BEFORE running the module are `/grafana/GF_DATABASE_PASSWORD` and `/grafana/GF_SECURITY_ADMIN_PASSWORD`
 
@@ -21,45 +32,26 @@ aws ssm put-parameter --name "/grafana/GF_SECURITY_ADMIN_PASSWORD" --type "Secur
 
 ### Setup
 
-Because this setup enforces HTTPS, it is required to provide a DNS name space, a Route53 zone id, and certificate arn. There are also 2 secret values that should be manually created. Run the commands below to set the database password and the admin password for grafana.
+Because this setup enforces HTTPS, it is required to provide a DNS name space, a Route53 zone id, and certificate arn. There are also 2 secret values that should be manually created. Run the commands above to set the database password and the admin password for grafana.
 
 ### Example
 
 ```HCL
 module "grafana" {
-  source = "git@github.com:ulikabbq/grafana-fargate?ref=v0.3//tf"
+  source = "../tf/"
 
-  account_id    = "883447927050"
-  dns_zone      = "E37HSFATM75UF"
-  dns_name      = "grafana.exampledomain.com"
-  cert_arn      = "arn:aws:acm:us-east-1:883447927050:certificate/c037931f-c278-4cc4-a228-a2a7ea751dc5"
-  vpc_id        = "vpc-04e9a561"
-  subnets       = ["subnet-61swn044xb5p"]
-  lb_subnets    = ["subnet-7p20dzd4d68o", "subnet-2drmc0b737ij"]
-  db_subnet_ids = ["subnet-9i3qthun5kr8", "subnet-76sm7yb9ofja"]
-
-  //bastion setup
-  bastion_count         = "1"
-  key                   = "bastion"
-  bastion_whitelist_ips = ["0.0.0.0/0"]
-  bastion_subnet        = "subnet-7p20dzd4d68o"
-
-  aws_account_ids = {
-    default = "883447927050"
-  }
+  dns_zone        = "ZZ7C1JZLM75QT"
+  region          = "us-east-1"
+  vpc_id          = "vpc-04e9a561"
+  lb_subnets      = ["subnet-6ef25245", "subnet-32089345"]
+  subnets         = ["subnet-28fd4671", "subnet-8ad27ca4"]
+  db_subnet_ids   = ["subnet-6ef25245", "subnet-32089345"]
+  cert_arn        = "arn:aws:acm:us-east-1:433223883348:certificate/9891d84e-8a28-4531-afdb-78a2719b1a63"
+  dns_name        = "grafana.ulikabbq.com"
+  account_id      = "433223883348"
+  aws_account_ids = { main = "433223883348" }
 }
 
-output "grafana_rds" {
-  value = "${module.grafana.grafana_rds}"
-}
-
-output "grafana_bastion_ip" {
-  value = "${module.grafana.grafana_bastion_ip}"
-}
-
-output "grafana_role" {
-  value = "${module.grafana.grafana_role}"
-}
 ```
 
 ### Available Variables
@@ -71,8 +63,6 @@ output "grafana_role" {
 **aws_account_ids** the other account ids you wish to monitor
 
 **whitelist_ips:** the default is `0.0.0.0/0` so anyone would be able to reach the grafana instance. this is a list variable of ip addresses that can access grafana
-
-**bastion_whitelist_ips** the default is `0.0.0.0/0` so anyone would be able to ssh to the bastion instance. this is a list variable of ip addresses that can access the bastion host
 
 **dns_zone:** (Required) the Route53 zone id. this id is used to create the dns name
 
@@ -92,26 +82,18 @@ output "grafana_role" {
 
 **image_url** the default is `ulikabbq/grafana:v0.1`
 
-**nginx_image_url** the default is `ulikabbq/nginx_grafana:v0.1`
-
-**bastion_count** the number of bastion host. the deafult is 1, but set to 0 when the Aurora setup is complete
-
-**key** the key used to ssh into the bastion
-
-**bastion_whitelist_ips** the list of allowed ips to ssh to the bastion
-
-**bastion_subnet** the subnet for the bastion host
-
-### Aurora Setup
-
-Log into the bastion to access the Aurora database and run these commands:
-
-    mysql> GRANT USAGE ON `grafana`.* to 'grafana'@'<grafana-instance-001-EXAMPLE.us-east-1.rds.amazonaws.com>' identified by '<the password stored in ssm>';
-
-    mysql> GRANT ALL PRIVILEGES ON `grafana`.* to 'grafana'@'<grafana-instance-001-EXAMPLE.us-east-1.rds.amazonaws.com>' with grant option;
-
-    mysql> flush privileges;
 
 ### Grafana Configuration
 
-To Do: Add the grafana configuration to set the datasource in the base account.
+Grafana is configured with ssm. To add grafana configurations, add ssm resources with a prefix of `/grafana/` and when the container loads, it will bring in the associated configuration. See grafana docs https://grafana.com/docs/installation/configuration/
+
+```HCL
+resource "aws_ssm_parameter" "GF_INSTALL_PLUGINS" {
+  name  = "/grafana/GF_INSTALL_PLUGINS"
+  type  = "String"
+  value = "grafana-worldmap-panel,grafana-clock-panel,jdbranham-diagram-panel,natel-plotly-panel"
+}
+```
+
+### GitHub Actions 
+The GitHub Action in this repo will push the Dockerfile to ecr and update the grafana service. To utilize this action, change the account id in the task.json for the `executionRoleArn` and `taskRoleArn`. You will also need to add a `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to GitHub secrets. 
