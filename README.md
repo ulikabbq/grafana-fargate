@@ -3,11 +3,11 @@ It has been a while since I last visited this project and I felt like it needed 
 even easier to get this module up and running. 
 
 ## Updates 
-Upgraded to Terraform 0.12
-Added GitHub Actions to publish and deploy the fargate container 
-Grafana version 6.5.1 
-Removed the bastion host (no longer need to run the mysql commands)
-Removed nginx (was handling https redirects that are now in the lb listener)
+* Upgraded to Terraform 0.12
+* Added GitHub Actions to publish and deploy the fargate container 
+* Grafana version 6.5.1 
+* Removed the bastion host (no longer need to run the mysql commands)
+* Removed nginx (was handling https redirects that are now in the lb listener)
 
 # Grafana Fargate Terraform Module
 
