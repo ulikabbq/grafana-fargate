@@ -16,6 +16,26 @@ data "aws_iam_policy_document" "grafana_ecs_task_execution_assume_role" {
 // task execution role policy document
 data "aws_iam_policy_document" "grafana_ecs_task_execution_role" {
   statement {
+    sid       = "AllowECSToAuthenticateToECRInCentralAccount"
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowECSToPullSportslinegrafanaImage"
+    effect = "Allow"
+
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+    ]
+
+    resources = ["${aws_ecr_repository.grafana.arn}", ]
+  }
+
+  statement {
     sid    = "AllowECSToWriteLogsToCloudWatchLogs"
     effect = "Allow"
 
@@ -140,7 +160,7 @@ data "aws_iam_policy_document" "grafana_role" {
     effect = "Allow"
 
     actions = [
-      "cloudwatch:GetMetricStatistics",
+      "cloudwatch:GetMetric*",
       "cloudwatch:ListMetrics",
     ]
 

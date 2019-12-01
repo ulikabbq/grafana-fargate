@@ -20,8 +20,13 @@ resource "aws_lb_listener" "front_end_http" {
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.grafana.arn
-    type             = "forward"
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 
