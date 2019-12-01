@@ -16,7 +16,11 @@ module "grafana" {
   grafana_count = 2
 }
 
-provider "aws" {
-  region = "us-east-1"
+// Run this module in sub accounts so that grafana can assume the Grafana role in the account
+module "iam" {
+  source = "git@github.com:ulikabbq/grafana-fargate?ref=v1.0//tf/iam_role/"
+
+  grafana_account_id = "433223883348"
 }
+
 
