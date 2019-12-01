@@ -39,8 +39,4 @@ resource "aws_ssm_parameter" "GF_DATABASE_HOST" {
   value = "${aws_rds_cluster.grafana.endpoint}:3306"
 }
 
-resource "aws_ssm_parameter" "GF_REMOTE_CACHE_TYPE" {
-  name  = "/grafana/GF_REMOTE_CACHE_TYPE"
-  type  = "String"
-  value = "database"
-}
+

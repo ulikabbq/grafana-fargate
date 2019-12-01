@@ -46,6 +46,10 @@ resource "aws_ecs_service" "grafana" {
   }
 
   depends_on = [aws_lb.grafana]
+
+  lifecycle {
+    ignore_changes = [desired_count, task_definition]
+  }
 }
 
 resource "aws_cloudwatch_log_group" "grafana" {
