@@ -8,6 +8,7 @@ even easier to get this module up and running.
 * Grafana version 6.5.1 
 * Removed the bastion host (no longer need to run the mysql commands)
 * Removed nginx (was handling https redirects that are now in the lb listener)
+* Added IAM module to setup the grafana role in the monitored accounts (tf/iam_role)
 
 # Grafana Fargate Terraform Module
 
