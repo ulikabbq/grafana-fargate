@@ -8,8 +8,8 @@ locals {
     GF_DATABASE_PASSWORD = data.aws_ssm_parameter.rds_master_password.value
   }
 }
-data "template" "container_def" {
-  container_definitions = jsonencode([
+variable "container_def" {
+  value = jsonencode([
     {
       name        = "grafana"
       image       = "grafana/grafana:8.2.6"
@@ -44,7 +44,7 @@ resource "aws_ecr_repository" "grafana" {
 
 resource "aws_ecs_task_definition" "grafana" {
   family                   = "grafana_task_definition"
-  container_definitions    = data.template.container_def
+  container_definitions    = var.container_def
   requires_compatibilities = ["FARGATE"]
   cpu                      = 512
   memory                   = 1024
