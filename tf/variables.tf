@@ -63,10 +63,12 @@ variable "grafana_count" {
 }
 
 variable "grafana_db_username" {
+  type        = string
   description = "The username to use for the Grafana db backend"
 }
 
 variable "grafana_log_level" {
+  type        = string
   description = "The log level for the Grafana application"
   default     = "INFO"
 }
