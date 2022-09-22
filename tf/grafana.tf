@@ -1,11 +1,13 @@
+
+
 locals {
   grafana_config = {
     GF_SERVER_DOMAIN     = var.dns_name
-    GF_DATABASE_USER     = "root"
+    GF_DATABASE_USER     = var.grafana_db_username
     GF_DATABASE_TYPE     = "mysql"
     GF_DATABASE_HOST     = "${aws_rds_cluster.grafana.endpoint}:3306"
-    GF_LOG_LEVEL         = "INFO"
-    GF_DATABASE_PASSWORD = data.aws_ssm_parameter.rds_master_password.value
+    GF_LOG_LEVEL         = var.grafana_log_level
+    GF_DATABASE_PASSWORD = random_password.db_password.result
   }
 }
 resource "aws_ecs_cluster" "grafana" {
@@ -21,7 +23,7 @@ resource "aws_ecs_task_definition" "grafana" {
   container_definitions = jsonencode([
     {
       name         = "grafana"
-      image        = "grafana/grafana:8.2.6"
+      image        = var.image_url
       essential    = true
       portMappings = [
         {
