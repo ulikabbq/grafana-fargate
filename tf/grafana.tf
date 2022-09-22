@@ -1,39 +1,13 @@
 locals {
   grafana_config = {
-    GF_SERVER_ROOT_URL = var.dns_name
-    GF_DATABASE_USER = "root"
-    GF_DATABASE_TYPE = "mysql"
-    GF_DATABASE_HOST = "${aws_rds_cluster.grafana.endpoint}:3306"
-    GF_LOG_LEVEL = "INFO"
+    GF_SERVER_ROOT_URL   = var.dns_name
+    GF_DATABASE_USER     = "root"
+    GF_DATABASE_TYPE     = "mysql"
+    GF_DATABASE_HOST     = "${aws_rds_cluster.grafana.endpoint}:3306"
+    GF_LOG_LEVEL         = "INFO"
     GF_DATABASE_PASSWORD = data.aws_ssm_parameter.rds_master_password.value
   }
 }
-variable "container_def" {
-  value = jsonencode([
-    {
-      name        = "grafana"
-      image       = "grafana/grafana:8.2.6"
-      networkMode = "awsvpc"
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.grafana.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = "grafana"
-        }
-      }
-      environment = [
-        for key in keys(local.grafana_config) :
-        {
-          name  = key,
-          value = lookup(local.grafana_config, key)
-        }
-      ]
-    }
-  ])
-
-}
-
 resource "aws_ecs_cluster" "grafana" {
   name = "grafana"
 }
@@ -43,8 +17,29 @@ resource "aws_ecr_repository" "grafana" {
 }
 
 resource "aws_ecs_task_definition" "grafana" {
-  family                   = "grafana_task_definition"
-  container_definitions    = var.container_def
+  family                = "grafana_task_definition"
+  container_definitions = jsonencode([
+    {
+      name             = "grafana"
+      image            = "grafana/grafana:8.2.6"
+      networkMode      = "awsvpc"
+      logConfiguration = {
+        logDriver = "awslogs"
+        options   = {
+          awslogs-group         = aws_cloudwatch_log_group.grafana.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "grafana"
+        }
+      }
+      environment = [
+      for key in keys(local.grafana_config) :
+      {
+        name  = key,
+        value = lookup(local.grafana_config, key)
+      }
+      ]
+    }
+  ])
   requires_compatibilities = ["FARGATE"]
   cpu                      = 512
   memory                   = 1024
