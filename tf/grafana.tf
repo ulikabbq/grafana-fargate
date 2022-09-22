@@ -1,6 +1,6 @@
 locals {
   grafana_config = {
-    GF_SERVER_ROOT_URL   = var.dns_name
+    GF_SERVER_DOMAIN     = var.dns_name
     GF_DATABASE_USER     = "root"
     GF_DATABASE_TYPE     = "mysql"
     GF_DATABASE_HOST     = "${aws_rds_cluster.grafana.endpoint}:3306"
@@ -20,14 +20,16 @@ resource "aws_ecs_task_definition" "grafana" {
   family                = "grafana_task_definition"
   container_definitions = jsonencode([
     {
-      name             = "grafana"
-      image            = "grafana/grafana:8.2.6"
-      essential = true
-      portMappings = [{
-        hostPost = 3000
-        containerPort = 3000
-        protocol = "tcp"
-      }]
+      name         = "grafana"
+      image        = "grafana/grafana:8.2.6"
+      essential    = true
+      portMappings = [
+        {
+          hostPost      = 3000
+          containerPort = 3000
+          protocol      = "tcp"
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options   = {
