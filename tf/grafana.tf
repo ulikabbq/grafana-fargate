@@ -66,6 +66,14 @@ resource "aws_ecs_service" "grafana" {
   desired_count   = var.grafana_count
   launch_type     = "FARGATE"
 
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+
+  placement_strategy {
+    type  = "spread"
+    field = "instanceId"
+  }
+
   network_configuration {
     security_groups = [aws_security_group.grafana_ecs.id]
     subnets         = var.subnets
