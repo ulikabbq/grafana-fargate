@@ -33,11 +33,16 @@ resource "aws_db_subnet_group" "grafana" {
   }
 }
 
+resource "random_password" "db_password" {
+  length  = 16
+  special = false
+}
+
 resource "aws_rds_cluster" "grafana" {
   engine                 = "aurora"
   database_name          = "grafana"
   master_username        = "root"
-  master_password        = data.aws_ssm_parameter.rds_master_password.value
+  master_password        = random_password.db_password.result
   storage_encrypted      = true
   db_subnet_group_name   = aws_db_subnet_group.grafana.name
   vpc_security_group_ids = [aws_security_group.rds.id]
