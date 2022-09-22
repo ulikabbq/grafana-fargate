@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "grafana_ecs_task_execution_role" {
       "logs:PutLogEvents",
     ]
 
-    resources = ["${aws_cloudwatch_log_group.grafana.arn}/*"]
+    resources = ["${aws_cloudwatch_log_group.grafana.arn}:*"]
   }
 }
 
