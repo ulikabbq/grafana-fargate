@@ -69,7 +69,7 @@ resource "aws_ecs_service" "grafana" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
 
-  placement_strategy {
+  ordered_placement_strategy {
     type  = "spread"
     field = "instanceId"
   }
