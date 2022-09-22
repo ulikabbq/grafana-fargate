@@ -1,5 +1,3 @@
-
-
 locals {
   grafana_config = {
     GF_SERVER_DOMAIN     = var.dns_name
@@ -19,12 +17,12 @@ resource "aws_ecr_repository" "grafana" {
 }
 
 resource "aws_ecs_task_definition" "grafana" {
-  family = "grafana_task_definition"
+  family                = "grafana_task_definition"
   container_definitions = jsonencode([
     {
-      name      = "grafana"
-      image     = var.image_url
-      essential = true
+      name         = "grafana"
+      image        = var.image_url
+      essential    = true
       portMappings = [
         {
           hostPost      = 3000
@@ -34,18 +32,18 @@ resource "aws_ecs_task_definition" "grafana" {
       ]
       logConfiguration = {
         logDriver = "awslogs"
-        options = {
+        options   = {
           awslogs-group         = aws_cloudwatch_log_group.grafana.name
           awslogs-region        = var.region
           awslogs-stream-prefix = "grafana"
         }
       }
       environment = [
-        for key in keys(local.grafana_config) :
-        {
-          name  = key,
-          value = lookup(local.grafana_config, key)
-        }
+      for key in keys(local.grafana_config) :
+      {
+        name  = key,
+        value = lookup(local.grafana_config, key)
+      }
       ]
     }
   ])
@@ -55,6 +53,10 @@ resource "aws_ecs_task_definition" "grafana" {
   task_role_arn            = aws_iam_role.grafana_ecs_task.arn
   execution_role_arn       = aws_iam_role.grafana_ecs_task_execution.arn
   network_mode             = "awsvpc"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_ecs_service" "grafana" {
@@ -78,7 +80,7 @@ resource "aws_ecs_service" "grafana" {
   depends_on = [aws_lb.grafana]
 
   lifecycle {
-    ignore_changes = [desired_count, task_definition]
+    ignore_changes = [desired_count]
   }
 }
 
