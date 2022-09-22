@@ -1,6 +1,8 @@
-data "aws_ssm_parameter" "rds_master_password" {
-  name            = "/grafana/GF_DATABASE_PASSWORD"
-  with_decryption = "true"
+resource "aws_ssm_parameter" "rds_master_password" {
+  name  = "/grafana/GF_DATABASE_PASSWORD"
+  description = "Master password for the Grafana backend"
+  type  = "SecureString"
+  value = random_password.db_password.result
 }
 
 #resource "aws_ssm_parameter" "GF_INSTALL_PLUGINS" {
