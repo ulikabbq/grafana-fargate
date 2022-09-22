@@ -58,11 +58,14 @@ variable "image_url" {
   default     = "ulikabbq/grafana:0.1"
 }
 
-variable "nginx_image_url" {
-  description = "the image url for the nginx sidecar image"
-  default     = "ulikabbq/nginx_grafana:0.1"
-}
-
 variable "grafana_count" {
   default = "1"
+}
+
+variable "grafana_db_username" {
+  description = "The username to use for the Grafana db backend"
+}
+variable "grafana_log_level" {
+  description = "The log level for the Grafana application"
+  default = "INFO"
 }
