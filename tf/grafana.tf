@@ -23,11 +23,11 @@ resource "aws_ecs_task_definition" "grafana" {
       name             = "grafana"
       image            = "grafana/grafana:8.2.6"
       essential = true
-      portMappings = {
+      portMappings = [{
         hostPost = 3000
         containerPort = 3000
         protocol = "tcp"
-      }
+      }]
       logConfiguration = {
         logDriver = "awslogs"
         options   = {
