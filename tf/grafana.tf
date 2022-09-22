@@ -5,7 +5,7 @@ locals {
     GF_DATABASE_TYPE     = "mysql"
     GF_DATABASE_HOST     = "${aws_rds_cluster.grafana.endpoint}:3306"
     GF_LOG_LEVEL         = var.grafana_log_level
-    GF_DATABASE_PASSWORD = random_password.db_password.result
+    GF_DATABASE_PASSWORD = jsondecode(data.aws_secretsmanager_secret_version.grafana_db_backend.secret_string).password
   }
 }
 resource "aws_ecs_cluster" "grafana" {
