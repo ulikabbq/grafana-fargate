@@ -16,26 +16,6 @@ data "aws_iam_policy_document" "grafana_ecs_task_execution_assume_role" {
 // task execution role policy document
 data "aws_iam_policy_document" "grafana_ecs_task_execution_role" {
   statement {
-    sid       = "AllowECSToAuthenticateToECRInCentralAccount"
-    effect    = "Allow"
-    actions   = ["ecr:GetAuthorizationToken"]
-    resources = ["*"]
-  }
-
-  statement {
-    sid    = "AllowECSToPullSportslinegrafanaImage"
-    effect = "Allow"
-
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:BatchGetImage",
-    ]
-
-    resources = ["${aws_ecr_repository.grafana.arn}", ]
-  }
-
-  statement {
     sid    = "AllowECSToWriteLogsToCloudWatchLogs"
     effect = "Allow"
 
@@ -44,7 +24,7 @@ data "aws_iam_policy_document" "grafana_ecs_task_execution_role" {
       "logs:PutLogEvents",
     ]
 
-    resources = [aws_cloudwatch_log_group.grafana.arn]
+    resources = ["${aws_cloudwatch_log_group.grafana.arn}/*"]
   }
 }
 
@@ -99,7 +79,7 @@ data "aws_iam_policy_document" "grafana_ecs_task_role" {
     sid       = "AllowAccessToAssumeGrafanaRole"
     effect    = "Allow"
     actions   = ["sts:AssumeRole"]
-    resources = formatlist("arn:aws:iam::%s:role/Grafana", values(var.aws_account_ids))
+    resources = ["arn:aws:iam::${var.account_id}:role/Grafana"]
   }
 
   statement {
@@ -149,7 +129,7 @@ data "aws_iam_policy_document" "grafana_role_assume_role_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = formatlist("arn:aws:iam::%s:root", values(var.aws_account_ids))
+      identifiers = ["arn:aws:iam::${var.account_id}:root"]
     }
   }
 }
