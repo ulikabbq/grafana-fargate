@@ -55,7 +55,7 @@ variable "db_instance_type" {
 
 variable "image_url" {
   description = "the image url for the grafana image"
-  default     = "ulikabbq/grafana:0.1"
+  default     = "grafana/grafana:8.2.6"
 }
 
 variable "grafana_count" {
@@ -65,7 +65,8 @@ variable "grafana_count" {
 variable "grafana_db_username" {
   description = "The username to use for the Grafana db backend"
 }
+
 variable "grafana_log_level" {
   description = "The log level for the Grafana application"
-  default = "INFO"
+  default     = "INFO"
 }
