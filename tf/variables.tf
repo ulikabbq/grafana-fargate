@@ -7,13 +7,6 @@ variable "account_id" {
   default = ""
 }
 
-variable "aws_account_ids" {
-  type        = map(string)
-  description = "A mapping of AWS account IDs that have a Grafana role that allows Grafana to access CloudWatch metrics"
-
-  default = {}
-}
-
 variable "whitelist_ips" {
   type        = list(string)
   description = "List of whitelisted ip addresses that can access grafana"
