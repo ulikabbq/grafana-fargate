@@ -1,10 +1,10 @@
 locals {
   grafana_config = {
     GF_SERVER_ROOT_URL = var.dns_name
-    GF_DATABASE_USER = 'root'
-    GF_DATABASE_TYPE = 'mysql'
+    GF_DATABASE_USER = "root"
+    GF_DATABASE_TYPE = "mysql"
     GF_DATABASE_HOST = "${aws_rds_cluster.grafana.endpoint}:3306"
-    GF_LOG_LEVEL = 'INFO'
+    GF_LOG_LEVEL = "INFO"
     GF_DATABASE_PASSWORD = data.aws_ssm_parameter.rds_master_password.value
   }
 }
