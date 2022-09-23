@@ -17,12 +17,12 @@ resource "aws_ecr_repository" "grafana" {
 }
 
 resource "aws_ecs_task_definition" "grafana" {
-  family                = "grafana_task_definition"
+  family = "grafana_task_definition"
   container_definitions = jsonencode([
     {
-      name         = "grafana"
-      image        = var.image_url
-      essential    = true
+      name      = "grafana"
+      image     = var.image_url
+      essential = true
       portMappings = [
         {
           hostPost      = 3000
@@ -32,18 +32,18 @@ resource "aws_ecs_task_definition" "grafana" {
       ]
       logConfiguration = {
         logDriver = "awslogs"
-        options   = {
+        options = {
           awslogs-group         = aws_cloudwatch_log_group.grafana.name
           awslogs-region        = var.region
           awslogs-stream-prefix = "grafana"
         }
       }
       environment = [
-      for key in keys(local.grafana_config) :
-      {
-        name  = key,
-        value = lookup(local.grafana_config, key)
-      }
+        for key in keys(local.grafana_config) :
+        {
+          name  = key,
+          value = lookup(local.grafana_config, key)
+        }
       ]
     }
   ])
