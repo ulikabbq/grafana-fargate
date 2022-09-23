@@ -11,4 +11,4 @@ Further a Route53 hosted zone along with a certificate ARN (a wildcard one works
 
 ### Available Variables
 
-All required variables are described in `variables.tf`
+All required variables are further described in `variables.tf`
