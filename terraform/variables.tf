@@ -30,7 +30,7 @@ variable "dns_name" {
 
 variable "grafana_subdomain" {
   description = "The subdomain to use for Grafana. <grafana_subdomain>.<dns_name>"
-  type        = str
+  type        = string
 }
 
 variable "cert_arn" {
