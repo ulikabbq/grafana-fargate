@@ -25,12 +25,12 @@ data "aws_iam_policy_document" "grafana_role" {
 }
 
 resource "aws_iam_role" "grafana" {
-  name               = "Grafana"
+  name               = "${var.resource_prefix}-Grafana"
   assume_role_policy = data.aws_iam_policy_document.grafana_role_policy.json
 }
 
 resource "aws_iam_role_policy" "grafana_role" {
-  name   = "ReadOnlyAccessToCloudWatchAndEC2"
+  name   = "${var.resource_prefix}-ReadOnlyAccessToCloudWatchAndEC2"
   role   = aws_iam_role.grafana.name
   policy = data.aws_iam_policy_document.grafana_role.json
 }

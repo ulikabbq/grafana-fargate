@@ -1,5 +1,5 @@
 resource "aws_lb" "grafana" {
-  name            = "grafana"
+  name            = "${var.resource_prefix}-grafana"
   internal        = "false"
   security_groups = [aws_security_group.grafana_alb.id]
   subnets         = var.lb_subnets
@@ -8,7 +8,7 @@ resource "aws_lb" "grafana" {
   enable_deletion_protection = false
 
   tags = {
-    Name        = "grafana"
+    Name        = "${var.resource_prefix}-grafana"
     Description = "Application Load Balancer for Grafana"
     ManagedBy   = "Terraform"
   }
@@ -44,7 +44,7 @@ resource "aws_lb_listener" "front_end_https" {
 }
 
 resource "aws_lb_target_group" "grafana" {
-  name                 = "grafana-tg"
+  name                 = "${var.resource_prefix}-grafana-tg"
   port                 = 3000
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -61,7 +61,7 @@ resource "aws_lb_target_group" "grafana" {
   }
 
   tags = {
-    Name        = "grafana-tg"
+    Name        = "${var.resource_prefix}-grafana-tg"
     Description = "Target Group for Grafana"
     ManagedBy   = "Terraform"
   }
@@ -71,7 +71,7 @@ resource "aws_security_group" "grafana_alb" {
   description = "the alb security group that allows port 80/443 from whitelisted ips"
 
   vpc_id = var.vpc_id
-  name   = "grafana-alb"
+  name   = "${var.resource_prefix}-grafana-alb"
 
   ingress {
     protocol    = "tcp"

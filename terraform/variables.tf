@@ -3,15 +3,13 @@ variable "region" {
   description = "The primary AWS region"
 }
 
-variable "account_id" {
-  default = ""
+variable "resource_prefix" {
+  description = "A prefix to add to resource names. e.g. integration-<resource-name>"
+  type        = string
 }
 
-variable "aws_account_ids" {
-  type        = map(string)
-  description = "A mapping of AWS account IDs that have a Grafana role that allows Grafana to access CloudWatch metrics"
-
-  default = {}
+variable "account_id" {
+  default = ""
 }
 
 variable "whitelist_ips" {
@@ -26,8 +24,13 @@ variable "dns_zone" {
 }
 
 variable "dns_name" {
-  description = "The DNS name"
+  description = "The DNS name for the zone"
   default     = ""
+}
+
+variable "grafana_subdomain" {
+  description = "The subdomain to use for Grafana. <grafana_subdomain>.<dns_name>"
+  type        = string
 }
 
 variable "cert_arn" {
@@ -62,14 +65,20 @@ variable "db_instance_type" {
 
 variable "image_url" {
   description = "the image url for the grafana image"
-  default     = "ulikabbq/grafana:0.1"
-}
-
-variable "nginx_image_url" {
-  description = "the image url for the nginx sidecar image"
-  default     = "ulikabbq/nginx_grafana:0.1"
+  default     = "grafana/grafana:8.2.6"
 }
 
 variable "grafana_count" {
   default = "1"
+}
+
+variable "grafana_db_username" {
+  type        = string
+  description = "The username to use for the Grafana db backend"
+}
+
+variable "grafana_log_level" {
+  type        = string
+  description = "The log level for the Grafana application"
+  default     = "INFO"
 }
