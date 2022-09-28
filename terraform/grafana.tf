@@ -9,15 +9,15 @@ locals {
   }
 }
 resource "aws_ecs_cluster" "grafana" {
-  name = "grafana"
+  name = "${var.resource_prefix}-grafana"
 }
 
 resource "aws_ecr_repository" "grafana" {
-  name = "grafana"
+  name = "${var.resource_prefix}-grafana"
 }
 
 resource "aws_ecs_task_definition" "grafana" {
-  family = "grafana_task_definition"
+  family = "${var.resource_prefix}-grafana_task_definition"
   container_definitions = jsonencode([
     {
       name      = "grafana"
@@ -35,7 +35,7 @@ resource "aws_ecs_task_definition" "grafana" {
         options = {
           awslogs-group         = aws_cloudwatch_log_group.grafana.name
           awslogs-region        = var.region
-          awslogs-stream-prefix = "grafana"
+          awslogs-stream-prefix = "${var.resource_prefix}-grafana"
         }
       }
       environment = [
@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "grafana" {
 }
 
 resource "aws_ecs_service" "grafana" {
-  name            = "grafana"
+  name            = "${var.resource_prefix}-grafana"
   cluster         = aws_ecs_cluster.grafana.name
   task_definition = aws_ecs_task_definition.grafana.arn
   desired_count   = var.grafana_count
@@ -77,7 +77,7 @@ resource "aws_ecs_service" "grafana" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.grafana.arn
-    container_name   = "grafana"
+    container_name   = "${var.resource_prefix}-grafana"
     container_port   = 3000
   }
 
@@ -89,14 +89,14 @@ resource "aws_ecs_service" "grafana" {
 }
 
 resource "aws_cloudwatch_log_group" "grafana" {
-  name = "grafana"
+  name = "${var.resource_prefix}-grafana"
 }
 
 resource "aws_security_group" "grafana_ecs" {
   description = "ingress to the grafana fargate task from the alb"
 
   vpc_id = var.vpc_id
-  name   = "grafana-ecs"
+  name   = "${var.resource_prefix}-grafana-ecs"
 
   //nginx
   ingress {

@@ -1,6 +1,6 @@
 // ECS Service AutoScaling Alarm
 resource "aws_cloudwatch_metric_alarm" "grafana_service_high_cpu" {
-  alarm_name          = "grafana-CPU-Utilization-High-40"
+  alarm_name          = "${var.resource_prefix}-grafana-CPU-Utilization-High-40"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = "CPUUtilization"
@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "grafana_service_high_cpu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "grafana_service_low_cpu" {
-  alarm_name          = "grafana-CPU-Utilization-Low-29"
+  alarm_name          = "${var.resource_prefix}-grafana-CPU-Utilization-Low-29"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "5"
   metric_name         = "CPUUtilization"
@@ -46,7 +46,7 @@ resource "aws_appautoscaling_target" "service_scale_target" {
 }
 
 resource "aws_appautoscaling_policy" "service_up" {
-  name               = "grafana-scale-up"
+  name               = "${var.resource_prefix}-grafana-scale-up"
   service_namespace  = "ecs"
   resource_id        = "service/${aws_ecs_cluster.grafana.name}/${aws_ecs_service.grafana.name}"
   scalable_dimension = "ecs:service:DesiredCount"
@@ -66,7 +66,7 @@ resource "aws_appautoscaling_policy" "service_up" {
 }
 
 resource "aws_appautoscaling_policy" "service_down" {
-  name               = "grafana-scale-down"
+  name               = "${var.resource_prefix}-grafana-scale-down"
   service_namespace  = "ecs"
   resource_id        = "service/${aws_ecs_cluster.grafana.name}/${aws_ecs_service.grafana.name}"
   scalable_dimension = "ecs:service:DesiredCount"
@@ -84,4 +84,3 @@ resource "aws_appautoscaling_policy" "service_down" {
 
   depends_on = [aws_appautoscaling_target.service_scale_target]
 }
-

@@ -1,5 +1,5 @@
 resource "aws_security_group" "rds" {
-  name_prefix = "grafana-aurora56"
+  name_prefix = "${var.resource_prefix}-grafana-aurora56"
   description = "RDS Aurora access from internal security groups"
   vpc_id      = var.vpc_id
 
@@ -15,14 +15,14 @@ resource "aws_security_group" "rds" {
   }
 
   tags = {
-    Name        = "grafana-aurora56"
+    Name        = "${var.resource_prefix}-grafana-aurora56"
     Description = "RDS Aurora access from internal security groups"
     ManagedBy   = "Terraform"
   }
 }
 
 resource "aws_db_subnet_group" "grafana" {
-  name        = "grafana-aurora56"
+  name        = "${var.resource_prefix}-grafana-aurora56"
   description = "Subnets to launch RDS database into"
   subnet_ids  = var.db_subnet_ids
 
@@ -34,12 +34,12 @@ resource "aws_db_subnet_group" "grafana" {
 }
 
 data "aws_secretsmanager_secret_version" "grafana_db_backend" {
-  secret_id = "grafana-backend-db-creds"
+  secret_id = var.secret_id
 }
 
 resource "aws_rds_cluster" "grafana" {
   engine                 = "aurora"
-  database_name          = "grafana"
+  database_name          = "${var.resource_prefix}-grafana"
   master_username        = var.grafana_db_username
   master_password        = jsondecode(data.aws_secretsmanager_secret_version.grafana_db_backend.secret_string).password
   storage_encrypted      = true
@@ -48,7 +48,7 @@ resource "aws_rds_cluster" "grafana" {
   skip_final_snapshot    = true
 
   tags = {
-    Name        = "grafana"
+    Name        = "${var.resource_prefix}-grafana"
     Description = "RDS Aurora cluster for the grafana environment"
     ManagedBy   = "Terraform"
   }
@@ -63,7 +63,7 @@ resource "aws_rds_cluster_instance" "grafana" {
   count = "1"
 
   cluster_identifier         = aws_rds_cluster.grafana.id
-  identifier                 = "grafana-${count.index}"
+  identifier                 = "${var.resource_prefix}-grafana-${count.index}"
   engine                     = "aurora"
   instance_class             = var.db_instance_type
   publicly_accessible        = false
@@ -71,7 +71,7 @@ resource "aws_rds_cluster_instance" "grafana" {
   auto_minor_version_upgrade = true
 
   tags = {
-    Name        = "grafana-aurora-instance"
+    Name        = "${var.resource_prefix}-grafana-aurora-instance"
     Description = "RDS Aurora cluster for the grafana environment"
     ManagedBy   = "Terraform"
   }

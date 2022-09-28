@@ -30,13 +30,13 @@ data "aws_iam_policy_document" "grafana_ecs_task_execution_role" {
 
 // task execution role
 resource "aws_iam_role" "grafana_ecs_task_execution" {
-  name               = "grafana-ecs-task-execution"
+  name               = "${var.resource_prefix}-grafana-ecs-task-execution"
   assume_role_policy = data.aws_iam_policy_document.grafana_ecs_task_execution_assume_role.json
 }
 
 // task execution role policy
 resource "aws_iam_role_policy" "grafana_ecs_task_execution" {
-  name   = "grafana-ecs-task-execution"
+  name   = "${var.resource_prefix}-grafana-ecs-task-execution"
   role   = aws_iam_role.grafana_ecs_task_execution.name
   policy = data.aws_iam_policy_document.grafana_ecs_task_execution_role.json
 }
@@ -98,20 +98,20 @@ data "aws_iam_policy_document" "grafana_ecs_task_role" {
 
 // task role
 resource "aws_iam_role" "grafana_ecs_task" {
-  name               = "grafana-ecs-task"
+  name               = "${var.resource_prefix}-grafana-ecs-task"
   assume_role_policy = data.aws_iam_policy_document.grafana_ecs_task_assume_role.json
 }
 
 // task role policy
 resource "aws_iam_role_policy" "grafana_ecs_task" {
-  name   = "grafana-ecs-task"
+  name   = "${var.resource_prefix}-grafana-ecs-task"
   role   = aws_iam_role.grafana_ecs_task.name
   policy = data.aws_iam_policy_document.grafana_ecs_task_role.json
 }
 
 // grafana assume role 
 resource "aws_iam_role" "grafana_assume" {
-  name               = "Grafana"
+  name               = "${var.resource_prefix}-Grafana"
   assume_role_policy = data.aws_iam_policy_document.grafana_role_assume_role_policy.json
 }
 

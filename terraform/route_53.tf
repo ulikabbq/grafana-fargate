@@ -1,6 +1,6 @@
 resource "aws_route53_record" "grafana" {
   zone_id = var.dns_zone
-  name    = "grafana"
+  name    = "${var.resource_prefix}-grafana"
   type    = "A"
 
   alias {

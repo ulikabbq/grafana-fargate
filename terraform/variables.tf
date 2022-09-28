@@ -3,6 +3,11 @@ variable "region" {
   description = "The primary AWS region"
 }
 
+variable "resource_prefix" {
+  description = "A prefix to add to resource names. e.g. integration-<resource-name>"
+  type        = string
+}
+
 variable "account_id" {
   default = ""
 }
