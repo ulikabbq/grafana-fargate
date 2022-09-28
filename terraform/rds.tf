@@ -34,7 +34,7 @@ resource "aws_db_subnet_group" "grafana" {
 }
 
 data "aws_secretsmanager_secret_version" "grafana_db_backend" {
-  secret_id = var.secret_id
+  secret_id = "${var.resource_prefix}-grafana-backend-db-creds"
 }
 
 resource "aws_rds_cluster" "grafana" {
