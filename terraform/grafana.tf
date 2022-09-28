@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "grafana" {
   family = "${var.resource_prefix}-grafana_task_definition"
   container_definitions = jsonencode([
     {
-      name      = "grafana"
+      name      = "${var.resource_prefix}-grafana"
       image     = var.image_url
       essential = true
       portMappings = [
