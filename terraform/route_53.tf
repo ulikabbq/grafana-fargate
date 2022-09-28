@@ -1,6 +1,6 @@
 resource "aws_route53_record" "grafana" {
   zone_id = var.dns_zone
-  name    = var.dns_name
+  name    = var.grafana_subdomain
   type    = "A"
 
   alias {
