@@ -1,6 +1,6 @@
 locals {
   grafana_config = {
-    GF_SERVER_DOMAIN     = var.dns_name
+    GF_SERVER_DOMAIN     = "${var.grafana_subdomain}.${var.dns_name}"
     GF_DATABASE_USER     = var.grafana_db_username
     GF_DATABASE_TYPE     = "mysql"
     GF_DATABASE_HOST     = "${aws_rds_cluster.grafana.endpoint}:3306"

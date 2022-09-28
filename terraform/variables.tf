@@ -24,8 +24,13 @@ variable "dns_zone" {
 }
 
 variable "dns_name" {
-  description = "The DNS name"
+  description = "The DNS name for the zone"
   default     = ""
+}
+
+variable "grafana_subdomain" {
+  description = "The subdomain to use for Grafana. <grafana_subdomain>.<dns_name>"
+  type        = str
 }
 
 variable "cert_arn" {
