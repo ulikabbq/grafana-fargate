@@ -39,7 +39,7 @@ data "aws_secretsmanager_secret_version" "grafana_db_backend" {
 
 resource "aws_rds_cluster" "grafana" {
   engine                 = "aurora"
-  database_name          = "${var.resource_prefix}-grafana"
+  database_name          = "grafana"
   master_username        = var.grafana_db_username
   master_password        = jsondecode(data.aws_secretsmanager_secret_version.grafana_db_backend.secret_string).password
   storage_encrypted      = true
