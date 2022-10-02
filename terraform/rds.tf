@@ -39,7 +39,7 @@ resource "random_password" "password" {
 }
 
 resource "aws_secretsmanager_secret" "example" {
-  name = "${var.resource_prefix}-grafana-db-backend"
+  name = "${var.resource_prefix}-grafana-backend-database-creds"
 }
 
 resource "aws_secretsmanager_secret_version" "example" {
