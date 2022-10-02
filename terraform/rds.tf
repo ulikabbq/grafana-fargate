@@ -33,15 +33,25 @@ resource "aws_db_subnet_group" "grafana" {
   }
 }
 
-data "aws_secretsmanager_secret_version" "grafana_db_backend" {
-  secret_id = "${var.resource_prefix}-grafana-backend-db-creds"
+resource "random_password" "password" {
+  length  = 16
+  special = false
+}
+
+resource "aws_secretsmanager_secret" "example" {
+  name = "${var.resource_prefix}-grafana-db-backend"
+}
+
+resource "aws_secretsmanager_secret_version" "example" {
+  secret_id     = aws_secretsmanager_secret.example.id
+  secret_string = random_password.password.result
 }
 
 resource "aws_rds_cluster" "grafana" {
   engine                 = "aurora"
   database_name          = "grafana"
   master_username        = var.grafana_db_username
-  master_password        = jsondecode(data.aws_secretsmanager_secret_version.grafana_db_backend.secret_string).password
+  master_password        = random_password.password.result
   storage_encrypted      = true
   db_subnet_group_name   = aws_db_subnet_group.grafana.name
   vpc_security_group_ids = [aws_security_group.rds.id]
