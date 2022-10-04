@@ -48,8 +48,9 @@ resource "aws_secretsmanager_secret_version" "example" {
 }
 
 resource "aws_rds_cluster" "grafana" {
-  engine                 = "aurora"
   database_name          = "grafana"
+  engine                 = "aurora-mysql"
+  engine_version         = "5.7.mysql_aurora.2.03.2"
   master_username        = var.grafana_db_username
   master_password        = random_password.password.result
   storage_encrypted      = true
