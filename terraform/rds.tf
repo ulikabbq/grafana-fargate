@@ -50,7 +50,6 @@ resource "aws_secretsmanager_secret_version" "example" {
 resource "aws_rds_cluster" "grafana" {
   database_name          = "grafana"
   engine                 = "aurora-mysql"
-  engine_version         = "5.7.mysql_aurora.2.03.2"
   master_username        = var.grafana_db_username
   master_password        = random_password.password.result
   storage_encrypted      = true
@@ -75,7 +74,8 @@ resource "aws_rds_cluster_instance" "grafana" {
 
   cluster_identifier         = aws_rds_cluster.grafana.id
   identifier                 = "${var.resource_prefix}-grafana-${count.index}"
-  engine                     = "aurora"
+  engine                     = "aurora-mysql"
+  engine_version             = "5.7.mysql_aurora.2.03.2"
   instance_class             = var.db_instance_type
   publicly_accessible        = false
   db_subnet_group_name       = aws_db_subnet_group.grafana.name
