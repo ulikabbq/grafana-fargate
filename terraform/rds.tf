@@ -38,12 +38,13 @@ resource "random_password" "password" {
   special = false
 }
 
-resource "aws_secretsmanager_secret" "example" {
-  name = "${var.resource_prefix}-grafana-backend-db"
+resource "aws_secretsmanager_secret" "creds" {
+  name        = "${var.resource_prefix}-grafana-backend-db"
+  description = "Credential for Grafana MySQL backend"
 }
 
-resource "aws_secretsmanager_secret_version" "example" {
-  secret_id     = aws_secretsmanager_secret.example.id
+resource "aws_secretsmanager_secret_version" "creds" {
+  secret_id     = aws_secretsmanager_secret.creds.id
   secret_string = random_password.password.result
 }
 
