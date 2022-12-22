@@ -82,3 +82,25 @@ variable "grafana_log_level" {
   description = "The log level for the Grafana application"
   default     = "INFO"
 }
+
+variable "oauth_name" {
+  type = string
+  description = "The name to use for OAuth (for identification)"
+}
+
+variable "oauth_domain" {
+  type = string
+  description = "The domain for OAuth. Will be used to call authorize, token, and userinfo endpoints"
+}
+
+variable "oauth_client_id" {
+  type = string
+  description = "The client ID for OAuth"
+}
+
+variable "oauth_client_secret" {
+  type = string
+  description = "The client secret for OAuth"
+}
+
+
