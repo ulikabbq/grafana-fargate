@@ -8,7 +8,7 @@ locals {
     GF_DATABASE_PASSWORD = random_password.password.result
     ### AUTH
     GF_AUTH_GENERIC_OAUTH_ENABLED               = true
-    GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP         = false
+    GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP         = true
     GF_AUTH_GENERIC_OAUTH_TEAM_IDS              = ""
     GF_AUTH_GENERIC_OAUTH_ALLOWED_ORGANIZATIONS = ""
     GF_AUTH_GENERIC_OAUTH_NAME                  = var.oauth_name
