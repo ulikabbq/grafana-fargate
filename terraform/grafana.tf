@@ -106,3 +106,26 @@ resource "aws_cloudwatch_log_group" "grafana" {
   name = "${var.resource_prefix}-grafana"
 }
 
+# Not used anymore - temp because tf cannot destroy sg while attached
+resource "aws_security_group" "grafana_ecs" {
+  description = "ingress to the grafana fargate task from the alb"
+
+  vpc_id = var.vpc_id
+  name   = "${var.resource_prefix}-grafana-ecs"
+
+  //nginx
+  ingress {
+    protocol        = "tcp"
+    from_port       = 3000
+    to_port         = 3000
+    security_groups = [aws_security_group.grafana_alb.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
