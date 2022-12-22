@@ -15,9 +15,9 @@ locals {
     GF_AUTH_GENERIC_OAUTH_CLIENT_ID             = var.oauth_client_id
     GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET         = var.oauth_client_secret
     GF_AUTH_GENERIC_OAUTH_SCOPES                = "openid profile email"
-    GF_AUTH_GENERIC_OAUTH_AUTH_URL              = "${var.oauth_domain}/authorize"
-    GF_AUTH_GENERIC_OAUTH_TOKEN_URL             = "${var.oauth_domain}/oauth/token"
-    GF_AUTH_GENERIC_OAUTH_API_URL               = "${var.oauth_domain}/userinfo"
+    GF_AUTH_GENERIC_OAUTH_AUTH_URL              = "https://${var.oauth_domain}/authorize"
+    GF_AUTH_GENERIC_OAUTH_TOKEN_URL             = "https://${var.oauth_domain}/oauth/token"
+    GF_AUTH_GENERIC_OAUTH_API_URL               = "https://${var.oauth_domain}/userinfo"
     GF_AUTH_GENERIC_OAUTH_USE_PKCE              = "True"
   }
 }
