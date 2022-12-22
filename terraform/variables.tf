@@ -12,11 +12,12 @@ variable "account_id" {
   default = ""
 }
 
-variable "whitelist_ips" {
-  type        = list(string)
-  description = "List of whitelisted ip addresses that can access grafana"
+variable "grafana_alb_security_group_id" {
+  description = "id of the security group for the Grafana alb"
+}
 
-  default = ["0.0.0.0/0"]
+variable "grafana_ecs_security_group_id" {
+  description = "id of the security group for the Grafana ecs"
 }
 
 variable "dns_zone" {

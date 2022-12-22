@@ -7,7 +7,3 @@ output "grafana_role" {
   value = aws_iam_role.grafana_assume.arn
 }
 
-output "grafana_ecs_sg" {
-  value = aws_security_group.grafana_ecs.id
-}
-

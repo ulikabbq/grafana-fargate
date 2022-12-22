@@ -10,7 +10,7 @@ resource "aws_security_group" "rds" {
     to_port     = 3306
 
     security_groups = [
-      aws_security_group.grafana_ecs.id,
+      var.grafana_ecs_security_group_id,
     ]
   }
 
