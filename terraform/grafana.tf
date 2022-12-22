@@ -7,18 +7,18 @@ locals {
     GF_LOG_LEVEL         = var.grafana_log_level
     GF_DATABASE_PASSWORD = random_password.password.result
     ### AUTH
-    GF_AUTH_GENERIC_OAUTH_ENABLED = true
-    GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP = false
-    GF_AUTH_GENERIC_OAUTH_TEAM_IDS = ""
+    GF_AUTH_GENERIC_OAUTH_ENABLED               = true
+    GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP         = false
+    GF_AUTH_GENERIC_OAUTH_TEAM_IDS              = ""
     GF_AUTH_GENERIC_OAUTH_ALLOWED_ORGANIZATIONS = ""
-    GF_AUTH_GENERIC_OAUTH_NAME = var.oauth_name
-    GF_AUTH_GENERIC_OAUTH_CLIENT_ID = var.oauth_client_id
-    GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET = var.oauth_client_secret
-    GF_AUTH_GENERIC_OAUTH_SCOPES = "openid profile email"
-    GF_AUTH_GENERIC_OAUTH_AUTH_URL = "${var.oauth_domain}/authorize"
-    GF_AUTH_GENERIC_OAUTH_TOKEN_URL = "${var.oauth_domain}/oauth/token"
-    GF_AUTH_GENERIC_OAUTH_API_URL = "${var.oauth_domain}/userinfo"
-    GF_AUTH_GENERIC_OAUTH_USE_PKCE = true
+    GF_AUTH_GENERIC_OAUTH_NAME                  = var.oauth_name
+    GF_AUTH_GENERIC_OAUTH_CLIENT_ID             = var.oauth_client_id
+    GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET         = var.oauth_client_secret
+    GF_AUTH_GENERIC_OAUTH_SCOPES                = "openid profile email"
+    GF_AUTH_GENERIC_OAUTH_AUTH_URL              = "${var.oauth_domain}/authorize"
+    GF_AUTH_GENERIC_OAUTH_TOKEN_URL             = "${var.oauth_domain}/oauth/token"
+    GF_AUTH_GENERIC_OAUTH_API_URL               = "${var.oauth_domain}/userinfo"
+    GF_AUTH_GENERIC_OAUTH_USE_PKCE              = true
   }
 }
 resource "aws_ecs_cluster" "grafana" {
