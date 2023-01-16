@@ -12,11 +12,12 @@ variable "account_id" {
   default = ""
 }
 
-variable "whitelist_ips" {
-  type        = list(string)
-  description = "List of whitelisted ip addresses that can access grafana"
+variable "grafana_alb_security_group_id" {
+  description = "id of the security group for the Grafana alb"
+}
 
-  default = ["0.0.0.0/0"]
+variable "grafana_ecs_security_group_id" {
+  description = "id of the security group for the Grafana ecs"
 }
 
 variable "dns_zone" {
@@ -82,3 +83,25 @@ variable "grafana_log_level" {
   description = "The log level for the Grafana application"
   default     = "INFO"
 }
+
+variable "oauth_name" {
+  type        = string
+  description = "The name to use for OAuth (for identification)"
+}
+
+variable "oauth_domain" {
+  type        = string
+  description = "The domain for OAuth. Will be used to call authorize, token, and userinfo endpoints"
+}
+
+variable "oauth_client_id" {
+  type        = string
+  description = "The client ID for OAuth"
+}
+
+variable "oauth_client_secret" {
+  type        = string
+  description = "The client secret for OAuth"
+}
+
+
