@@ -66,33 +66,3 @@ resource "aws_lb_target_group" "grafana" {
     ManagedBy   = "Terraform"
   }
 }
-
-# Not used anymore - temp because tf cannot destroy sg while attached
-resource "aws_security_group" "grafana_alb" {
-  description = "the alb security group that allows port 80/443 from whitelisted ips"
-
-  vpc_id = var.vpc_id
-  name   = "${var.resource_prefix}-grafana-alb"
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
