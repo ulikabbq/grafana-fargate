@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "3.33.0"
+    }
+  }
+}
+
 resource "cloudflare_record" "record" {
   zone_id         = var.cloudflare_zone_id
   name            = var.cloudflare_record_name
