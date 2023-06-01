@@ -118,3 +118,8 @@ variable "cloudflare_record_tags" {
   description = "Tags for cloudflare DNS record"
   type        = list(string)
 }
+
+variable "cloudflare_certificate_arn" {
+  description = "Cloudflare certificate ARN"
+  type        = string
+}

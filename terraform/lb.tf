@@ -43,6 +43,11 @@ resource "aws_lb_listener" "front_end_https" {
   }
 }
 
+resource "aws_lb_listener_certificate" "cloudflare" {
+  listener_arn    = aws_lb_listener.front_end_https.arn
+  certificate_arn = var.cloudflare_certificate_arn
+}
+
 resource "aws_lb_target_group" "grafana" {
   name                 = "${var.resource_prefix}-grafana-tg"
   port                 = 3000
