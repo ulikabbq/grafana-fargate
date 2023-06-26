@@ -13,7 +13,7 @@ resource "cloudflare_record" "record" {
   type            = "CNAME"
   value           = aws_lb.grafana.dns_name
   ttl             = 1
-  proxied         = false
+  proxied         = true
   allow_overwrite = true
   tags            = var.cloudflare_record_tags
 }
