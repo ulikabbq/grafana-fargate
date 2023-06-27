@@ -20,10 +20,6 @@ variable "grafana_ecs_security_group_id" {
   description = "id of the security group for the Grafana ecs"
 }
 
-variable "dns_zone" {
-  description = "the Route 53 ZoneId"
-}
-
 variable "dns_name" {
   description = "The DNS name for the zone"
   default     = ""
@@ -119,7 +115,3 @@ variable "cloudflare_record_tags" {
   type        = list(string)
 }
 
-variable "cloudflare_certificate_arn" {
-  description = "Cloudflare certificate ARN"
-  type        = string
-}
