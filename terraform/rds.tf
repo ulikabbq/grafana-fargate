@@ -41,6 +41,21 @@ resource "aws_secretsmanager_secret_version" "creds" {
   secret_string = random_password.password.result
 }
 
+resource "aws_kms_key" "this" {
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key
+  description         = "Key used to encrypt data in virtual analyzer monitoring database"
+  enable_key_rotation = true
+  multi_region = true
+
+  tags = var.common_tags
+}
+
+resource "aws_kms_alias" "a" {
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias
+  name          = "alias/${var.common_tags.env}-${var.common_tags.service}-s3-kms-key"
+  target_key_id = aws_kms_key.this.key_id
+}
+
 resource "aws_rds_cluster" "grafana" {
   # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster
   database_name          = "grafana"
@@ -52,7 +67,7 @@ resource "aws_rds_cluster" "grafana" {
   db_subnet_group_name   = aws_db_subnet_group.grafana.name
   vpc_security_group_ids = [aws_security_group.rds.id]
   skip_final_snapshot    = true
-  kms_key_id             = 
+  kms_key_id             = aws_kms_key.this.key_id
 
   tags = var.common_tags
 
