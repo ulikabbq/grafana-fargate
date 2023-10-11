@@ -1,3 +1,11 @@
+variable "common_tags" {
+  type = object({
+    service     = string
+    env         = string
+    managed-via = string
+  })
+}
+
 variable "region" {
   default     = "us-east-1"
   description = "The primary AWS region"
@@ -114,4 +122,3 @@ variable "cloudflare_record_tags" {
   description = "Tags for cloudflare DNS record"
   type        = list(string)
 }
-

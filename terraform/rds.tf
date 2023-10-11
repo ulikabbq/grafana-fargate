@@ -1,4 +1,5 @@
 resource "aws_security_group" "rds" {
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
   name_prefix = "${var.resource_prefix}-grafana-aurora56"
   description = "RDS Aurora access from internal security groups"
   vpc_id      = var.vpc_id
@@ -13,24 +14,16 @@ resource "aws_security_group" "rds" {
       var.grafana_ecs_security_group_id,
     ]
   }
-
-  tags = {
-    Name        = "${var.resource_prefix}-grafana-aurora56"
-    Description = "RDS Aurora access from internal security groups"
-    ManagedBy   = "Terraform"
-  }
+  tags = var.common_tags
 }
 
 resource "aws_db_subnet_group" "grafana" {
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group
   name        = "${var.resource_prefix}-grafana-aurora56"
   description = "Subnets to launch RDS database into"
   subnet_ids  = var.db_subnet_ids
 
-  tags = {
-    Name        = "grafana-aurora56-subnet-group"
-    Description = "Subnets to use for RDS databases"
-    ManagedBy   = "Terraform"
-  }
+  tags = var.common_tags
 }
 
 resource "random_password" "password" {
@@ -49,6 +42,7 @@ resource "aws_secretsmanager_secret_version" "creds" {
 }
 
 resource "aws_rds_cluster" "grafana" {
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster
   database_name          = "grafana"
   engine                 = "aurora-mysql"
   engine_version         = "5.7.mysql_aurora.2.11.2"
@@ -58,12 +52,9 @@ resource "aws_rds_cluster" "grafana" {
   db_subnet_group_name   = aws_db_subnet_group.grafana.name
   vpc_security_group_ids = [aws_security_group.rds.id]
   skip_final_snapshot    = true
+  kms_key_id             = 
 
-  tags = {
-    Name        = "${var.resource_prefix}-grafana"
-    Description = "RDS Aurora cluster for the grafana environment"
-    ManagedBy   = "Terraform"
-  }
+  tags = var.common_tags
 
   lifecycle {
     create_before_destroy = true
@@ -72,6 +63,7 @@ resource "aws_rds_cluster" "grafana" {
 }
 
 resource "aws_rds_cluster_instance" "grafana" {
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance
   count = "1"
 
   cluster_identifier         = aws_rds_cluster.grafana.id
@@ -83,11 +75,7 @@ resource "aws_rds_cluster_instance" "grafana" {
   db_subnet_group_name       = aws_db_subnet_group.grafana.name
   auto_minor_version_upgrade = true
 
-  tags = {
-    Name        = "${var.resource_prefix}-grafana-aurora-instance"
-    Description = "RDS Aurora cluster for the grafana environment"
-    ManagedBy   = "Terraform"
-  }
+  tags = var.common_tags
 
   lifecycle {
     create_before_destroy = true
